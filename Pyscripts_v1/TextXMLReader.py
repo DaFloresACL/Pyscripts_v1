@@ -13,7 +13,7 @@ folder = r'\\ac-hq-fs01\users$\daflores\My Documents\XMLDataResponseRequests\\'
 os.chdir(folder)
 os.getcwd()
 
-
+writer = pd.ExcelWriter(r'\\ac-hq-fs01\users$\daflores\My Documents\\DataDictionary.xlsx', engine='xlsxwriter')
 
 sub_dir = os.listdir(folder)
 
@@ -38,7 +38,13 @@ for dir in sub_dir:
                             sent = line.lstrip().split('>')[0]
                         else:
                             fields.append(line.lstrip().split('>')[0] + '>')
-                            example.append(line.lstrip().split('>')[1][1:])
+                            example.append(line.lstrip().split('>')[1].split('<')[0])
+                    df['Folder'] = dir
+                    df['File'] = files + '\\' + file
+                    df['SentFor'] = sent
+                    df = df[['Folder','File','SentFor','Fields','Example']]
+                    sheetname = files + '\\' + file
+                    df.to_excel(writer,sheet_name = sheetname[0:31])
         else:
             with open(folder[:-1] + dir + r'\\' + files) as fd:
                 xml = fd.readlines()
@@ -52,17 +58,14 @@ for dir in sub_dir:
                         sent = line.lstrip().split('>')[0]
                     else:
                         fields.append(line.lstrip().split('>')[0] + '>')
-                        example.append(line.lstrip().split('>')[1][1:])
-                
+                        example.append(line.lstrip().split('>')[1].split('<')[0])
+                df = pd.DataFrame(list(zip(fields,example)),columns = ['Fields','Example'])
+                df['Folder'] = dir
+                df['File'] = files
+                df['SentFor'] = sent
+                df = df[['Folder','File','SentFor','Fields','Example']]
+                sheetname = files
+                df.to_excel(writer,sheet_name = sheetname[0:31])
 
-#for j in soup:
-#    n2 = j.split('>')
-#    print(n2)
-#    for i in n2:
-#        print(i + '>')
-#    print(type(j))
-#    c.append(j)
-
-
-#c
-
+writer.save()
+writer.close()
