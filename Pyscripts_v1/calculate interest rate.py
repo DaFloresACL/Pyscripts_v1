@@ -60,7 +60,7 @@ def create_paymentSch(df,column):
     return paymentsch
 
 def create_amort(amount,payment,PCycles,APR,sch):
-    apr = APR/365.0/100.0
+    apr = (APR/100)/365
 
     BegP = amount
     BegI = 0
@@ -80,7 +80,7 @@ def create_amort(amount,payment,PCycles,APR,sch):
         PMT = paymentsch[1]
         #print(n)
         BegP = BegP - PPMT
-        BegI = round(BegP - IPMT,15)
+        BegI = round(BegI + CurI - IPMT,15)
 
         CurI = round(BegP * seq * apr,15)
         if PMT > BegI + CurI + BegP:
@@ -99,6 +99,7 @@ def create_amort(amount,payment,PCycles,APR,sch):
             IPMT = round(CurI,2)
             endI = round(CurI - PMT,15)
             endP = round(BegP,2)
+            
     
         dAMORT[n] = {'BegP': BegP,  'BegI': BegI, 'CurI': CurI, 'PMT': PMT, 'IPMT': IPMT, 'PPMT' : PPMT, 'endP': endP, 'endI': endI}
         if PMT > BegI + CurI + BegP:
@@ -189,14 +190,14 @@ for index,row in loans.iterrows():
     Findings.append(summary)
 
 df = pd.DataFrame(Findings, columns = ['LoanID','LoanNo','APR','CalculatedInterestRate','APR_EndingPrincipal','IR_EndingPrincipal'])
-df.to_excel('Findings4.xlsx')
+df.to_excel('Findings5.xlsx')
 
-#sch2 = pd.read_sql("select * from LMSScheduledPayments sch where LoanID = '8D23BF5B-58E8-4F35-A90F-8D8B741150C2' order by DateScheduled",cnxn2)
-#pay2 = pd.read_sql("select distinct amount from LMSScheduledPayments sch where LoanID = '8D23BF5B-58E8-4F35-A90F-8D8B741150C2' ",cnxn2)
-#disburse2 = parser.parse('2021-01-13 00:00:00.000')
-#APR2 = -694.2501111
-#amount2 = 8000.00
-#payment2 = 666.67
+#sch2 = pd.read_sql("select * from LMSScheduledPayments sch where LoanID = '5E79112D-2659-448B-AD1F-8D92C38B48E9' order by DateScheduled",cnxn2)
+#pay2 = pd.read_sql("select distinct amount from LMSScheduledPayments sch where LoanID = '5E79112D-2659-448B-AD1F-8D92C38B48E9' ",cnxn2)
+#disburse2 = parser.parse('2021-06-11 00:00:00.000')
+#APR2 = 35.2298
+#amount2 = 175
+#payment2 = 4.01
 #PCycles2 = create_NPER(disburse2,sch2)
 #dAMORT2 = create_amort(amount2,payment2,PCycles2,APR2,sch2)
 #v = pd.DataFrame.from_dict(dAMORT2 , orient='index')
@@ -220,3 +221,51 @@ df.to_excel('Findings4.xlsx')
 #    z += 1
 
 #perbet
+
+#apr = (APR2/100)/365
+
+#BegP = amount2
+#BegI = 0
+#CurI = 0
+#PMT = payment2
+#IPMT = 0
+#PPMT = 0
+#endP = 0
+#endI = 0
+#paymentsch2 = create_paymentSch(sch2,'amount')
+
+    
+#n = 0
+#dAMORT2 = {}
+#for seq in PCycles2:
+#    n += 1
+#    PMT = paymentsch2[1]
+#    #print(n)
+#    BegP = BegP - PPMT
+#    BegI = round(BegI - IPMT,15)
+
+#    CurI = round(BegP * seq * apr,15)
+#    if PMT > BegI + CurI + BegP:
+#        PMT = PMT - round((BegI + CurI + BegP),2)
+#        PPMT = round(BegP,2)
+#        print(BegI + CurI)
+#        IPMT = round(BegI + CurI,2)
+#        endP = 0
+#        endI = 0
+        
+#    elif CurI < PMT:
+#        endI = 0
+#        print(CurI)
+#        IPMT = round(CurI,2)
+#        PPMT = round(PMT - IPMT,2)
+#        endP = BegP - PPMT
+#    else:
+#        print(IPMT)
+#        IPMT = round(CurI,2)
+#        endI = round(CurI - PMT,15)
+#        endP = round(BegP,2)
+            
+    
+#    dAMORT2[n] = {'BegP': BegP,  'BegI': BegI, 'CurI': CurI, 'PMT': PMT, 'IPMT': IPMT, 'PPMT' : PPMT, 'endP': endP, 'endI': endI}
+#    if PMT > BegI + CurI + BegP:
+#        break

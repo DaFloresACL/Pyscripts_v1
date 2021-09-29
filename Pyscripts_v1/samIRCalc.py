@@ -528,6 +528,7 @@ def PrintAmortSch(D1,D2,NPER,freq,P,I,A):
     print(NPER)
     for x in range((NPER)):
         print(x, dAMORT[x])
+    print(I)
 
 def MyTest2():
     LoanAmount = 175
