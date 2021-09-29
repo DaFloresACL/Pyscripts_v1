@@ -22,10 +22,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ACF_Files.py" />
+    <Compile Include="calculate interest rate.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Distance.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TextXMLReader.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="txt_into_xml.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

@@ -13,10 +13,10 @@ folder = r'\\ac-hq-fs01\users$\daflores\My Documents\XMLDataResponseRequests\\'
 os.chdir(folder)
 os.getcwd()
 
-writer = pd.ExcelWriter(r'\\ac-hq-fs01\users$\daflores\My Documents\\DataDictionary.xlsx', engine='xlsxwriter')
+writer = pd.ExcelWriter(r'\\ac-hq-fs01\users$\daflores\My Documents\\DataDictionary_3.xlsx', engine='xlsxwriter')
 
 sub_dir = os.listdir(folder)
-
+folders = []
 for dir in sub_dir:
 #    print(dir)
     for files in os.listdir(dir):
@@ -37,7 +37,7 @@ for dir in sub_dir:
                         if len(line.lstrip().split('>')) == 1 :
                             sent = line.lstrip().split('>')[0]
                         else:
-                            fields.append(line.lstrip().split('>')[0] + '>')
+                            fields.append(line.lstrip().split('>')[0][1:])
                             example.append(line.lstrip().split('>')[1].split('<')[0])
                     df['Folder'] = dir
                     df['File'] = files + '\\' + file
@@ -45,6 +45,12 @@ for dir in sub_dir:
                     df = df[['Folder','File','SentFor','Fields','Example']]
                     sheetname = files + '\\' + file
                     df.to_excel(writer,sheet_name = sheetname[0:31])
+                    if dir in folders:
+                        continue
+                    else:    
+                        df.to_excel(writer,sheet_name = sheetname[0:31])
+                        folders.append(dir)
+
         else:
             with open(folder[:-1] + dir + r'\\' + files) as fd:
                 xml = fd.readlines()
@@ -57,7 +63,7 @@ for dir in sub_dir:
                     if len(line.lstrip().split('>')) == 1:
                         sent = line.lstrip().split('>')[0]
                     else:
-                        fields.append(line.lstrip().split('>')[0] + '>')
+                        fields.append(line.lstrip().split('>')[0][1:])
                         example.append(line.lstrip().split('>')[1].split('<')[0])
                 df = pd.DataFrame(list(zip(fields,example)),columns = ['Fields','Example'])
                 df['Folder'] = dir
@@ -65,7 +71,11 @@ for dir in sub_dir:
                 df['SentFor'] = sent
                 df = df[['Folder','File','SentFor','Fields','Example']]
                 sheetname = files
-                df.to_excel(writer,sheet_name = sheetname[0:31])
+                if dir in folders:
+                    continue
+                else:    
+                    df.to_excel(writer,sheet_name = sheetname[0:31])
+                    folders.append(dir)
 
 writer.save()
 writer.close()
