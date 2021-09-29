@@ -72,7 +72,7 @@ def create_amort(amount,payment,PCycles,APR,sch):
     endI = 0
     paymentsch = create_paymentSch(sch,'amount')
 
-
+    
     n = 0
     dAMORT = {}
     for seq in PCycles:
@@ -80,25 +80,25 @@ def create_amort(amount,payment,PCycles,APR,sch):
         PMT = paymentsch[1]
         #print(n)
         BegP = BegP - PPMT
-        BegI = BegP - IPMT
+        BegI = round(BegP - IPMT,15)
 
-        CurI = BegP * seq * apr
+        CurI = round(BegP * seq * apr,15)
         if PMT > BegI + CurI + BegP:
-            PMT = PMT - (BegI + CurI + BegP)
-            PPMT = BegP
-            IPMT = BegI + CurI
+            PMT = PMT - round((BegI + CurI + BegP),2)
+            PPMT = round(BegP,2)
+            IPMT = round(BegI + CurI,2)
             endP = 0
             endI = 0
         
         elif CurI < PMT:
             endI = 0
-            IPMT = CurI
-            PPMT = PMT - IPMT
+            IPMT = round(CurI,2)
+            PPMT = round(PMT - IPMT,2)
             endP = BegP - PPMT
         else:
-            IPMT = CurI
-            endI = CurI - PMT
-            endP = BegP
+            IPMT = round(CurI,2)
+            endI = round(CurI - PMT,15)
+            endP = round(BegP,2)
     
         dAMORT[n] = {'BegP': BegP,  'BegI': BegI, 'CurI': CurI, 'PMT': PMT, 'IPMT': IPMT, 'PPMT' : PPMT, 'endP': endP, 'endI': endI}
         if PMT > BegI + CurI + BegP:
