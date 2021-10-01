@@ -491,18 +491,18 @@ def Main(LoanAmount,MaxTargetAPR,MaxTargetTerm,freq,FundDt,NextPayDt):
     return results
 
 def MyTest():
-    LoanAmount = 175
-    MaxTargetAPR = 0.352298
-    MaxTargetTerm = 52
-    freq = 'Weekly'
-    FundDt = '2021-06-10'
-    NextPayDt = '2021-06-18'
+    LoanAmount = 8000
+    MaxTargetAPR = 0.0010
+    MaxTargetTerm = 12
+    freq = 'Monthly'
+    FundDt = '2021-01-13'
+    NextPayDt = '2021-02-01'
 
     results = Main(LoanAmount,MaxTargetAPR,MaxTargetTerm,freq,FundDt,NextPayDt)
 
     print('Loan amount: ${:,.2f}'.format(LoanAmount))
     P = results['P']
-    #P = 4.01
+    P = 666.67
     print('Payment amount: ${:,.2f}'.format(P))
     FCHRG = results['FCHRG']
     print('Finance charge: ${:,.2f}'.format(FCHRG))
@@ -518,7 +518,7 @@ def MyTest():
     print('')
     D1 = du.parser.parse(FundDt)
     D2 = du.parser.parse(NextPayDt)
-    PrintAmortSch(D1,D2,MaxTargetTerm,freq,P,IR,LoanAmount)
+    #PrintAmortSch(D1,D2,MaxTargetTerm,freq,P,IR,LoanAmount)
 
 def PrintAmortSch(D1,D2,NPER,freq,P,I,A):
     results = SchDtRange(D1,D2,NPER,freq)
@@ -562,4 +562,4 @@ def MyTest2():
 
 
 MyTest()
-MyTest2()
+#MyTest2()

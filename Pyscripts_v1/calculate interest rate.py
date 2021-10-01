@@ -31,18 +31,22 @@ cnxn2 = pypyodbc.connect("Driver={SQL Server Native Client 11.0};"
                         "Database=FinanceTeamDB;"
                         "Trusted_Connection=yes;")
 
+
+
 def create_NPER(disburse,df):
     l = ''
     z = 0
-    daysbetween = [disburse]
+    daysbetween = [parser.parse(str(disburse))]
     perbet = []
 
     for index,row in df.iterrows():
-        daysbetween.append(row['datescheduled'])
+        toparse = str(row['datescheduled'].strftime('%Y-%m-%d'))
+        dstamp = parser.parse(toparse)
+        daysbetween.append(dstamp)
 
     for i in daysbetween:
         if z == 0:
-            l = disburse
+            l = i
         else:
             perbet.append((i-l).days)
             l = i
@@ -80,28 +84,31 @@ def create_amort(amount,payment,PCycles,APR,sch):
         PMT = paymentsch[1]
         #print(n)
         BegP = BegP - PPMT
-        BegI = round(BegI + CurI - IPMT,15)
+        BegI = endI
 
-        CurI = round(BegP * seq * apr,15)
-        if PMT > BegI + CurI + BegP:
-            PMT = PMT - round((BegI + CurI + BegP),2)
-            PPMT = round(BegP,2)
-            IPMT = round(BegI + CurI,2)
+        CurI = BegP * seq * apr
+        if PMT >= round(BegI + CurI + BegP,2):
+            IPMT = CurI + BegI
+            IPMT2 = round(CurI + BegI,2)
+            PPMT = PMT - round(IPMT2,2)
+            PMT = round(BegP + BegI + CurI,2)
             endP = 0
             endI = 0
         
         elif CurI < PMT:
-            endI = 0
-            IPMT = round(CurI,2)
+            IPMT = CurI + BegI
+            IPMT2 = round(CurI + BegI,2)
             PPMT = round(PMT - IPMT,2)
             endP = BegP - PPMT
+            endI = BegI + CurI - round(IPMT,2)
         else:
-            IPMT = round(CurI,2)
-            endI = round(CurI - PMT,15)
+            IPMT = CurI
+            IPMT2 = round(CurI,2)
+            endI = round(BegI + CurI - PMT,15)
             endP = round(BegP,2)
             
     
-        dAMORT[n] = {'BegP': BegP,  'BegI': BegI, 'CurI': CurI, 'PMT': PMT, 'IPMT': IPMT, 'PPMT' : PPMT, 'endP': endP, 'endI': endI}
+        dAMORT[n] = {'Days':seq, 'BegP': BegP,  'BegI': BegI, 'CurI': CurI, 'PMT': PMT, 'IPMT': IPMT2, 'PPMT' : PPMT, 'endP': endP, 'endI': endI}
         if PMT > BegI + CurI + BegP:
             break
     return dAMORT
@@ -160,7 +167,7 @@ Findings = []
 for index,row in loans.iterrows():
     sch = pd.read_sql("select * from LMSScheduledPayments sch where LoanID = " + str(row['loanid'])[1:] + " order by DateScheduled",cnxn2)
     #second query here to make dictionary with key being LoanID and values list/dict of supplemental script
-    disburse = row['loandisbursementdatetimecst']
+    disburse = str(row['loandisbursementdatetimecst'].strftime('%Y-%m-%d'))
     payments = pd.read_sql("select distinct amount from LMSScheduledPayments sch where LoanID = " + str(row['loanid'])[1:] ,cnxn2)
     APR = row['apr']
     amount = row['loanamount']
@@ -186,86 +193,98 @@ for index,row in loans.iterrows():
     os.chdir(r'\\ac-hq-fs01\users$\daflores\My Documents\\')
     #for i in range(len(test_dAMORT)):
     #pd.DataFrame.from_dict(test_dAMORT = create_amort(amount,payment,PCycles,IR,sch), orient='index')
-    summary = [str(row.loanid)[2:-1],row.loanno,i,IR,APRendP,IRendP]
+    summary = [str(row.loanid)[2:-1],row.loanno,A,P,i,IR,APRendP,IRendP]
     Findings.append(summary)
 
-df = pd.DataFrame(Findings, columns = ['LoanID','LoanNo','APR','CalculatedInterestRate','APR_EndingPrincipal','IR_EndingPrincipal'])
+df = pd.DataFrame(Findings, columns = ['LoanID','LoanNo','LoanAmount','Payment','APR','CalculatedInterestRate','APR_EndingPrincipal','IR_EndingPrincipal'])
 df.to_excel('Findings5.xlsx')
 
-#sch2 = pd.read_sql("select * from LMSScheduledPayments sch where LoanID = '5E79112D-2659-448B-AD1F-8D92C38B48E9' order by DateScheduled",cnxn2)
-#pay2 = pd.read_sql("select distinct amount from LMSScheduledPayments sch where LoanID = '5E79112D-2659-448B-AD1F-8D92C38B48E9' ",cnxn2)
-#disburse2 = parser.parse('2021-06-11 00:00:00.000')
-#APR2 = 35.2298
-#amount2 = 175
-#payment2 = 4.01
-#PCycles2 = create_NPER(disburse2,sch2)
-#dAMORT2 = create_amort(amount2,payment2,PCycles2,APR2,sch2)
-#v = pd.DataFrame.from_dict(dAMORT2 , orient='index')
 
-#l = ''
-#z = 0
-#daysbetween = [disburse2]
-#perbet = []
+loanid = '7ED1552D-F2D2-49FA-B2EF-8D9672CDA3AB'
+sch2 = pd.read_sql(f"select * from LMSScheduledPayments sch where LoanID = '{loanid}' order by DateScheduled",cnxn2)
+pay2 = pd.read_sql(f"select distinct amount from LMSScheduledPayments sch where LoanID = '{loanid}' ",cnxn2)
+disburse2 = parser.parse('2021-01-13 00:00:00.000')
+loandf = pd.read_sql(f"select * from v_PosAPR_NegCalcIR sch where LoanID = '{loanid}' ",cnxn2)
+disburse2 = parser.parse(loandf['loandisbursementdatetimecst'][0].strftime('%Y-%m-%d'))
 
-#for index,row in sch2.iterrows():
-#    row['datescheduled']
-#    daysbetween.append(row['datescheduled'])
+APR2 = loandf['apr'][0] #0.0010
+amount2 = loandf['loanamount'][0] #8000
+payment2 = pay2['amount'][len(pay2)-1] #666.67
+PCycles2 = create_NPER(disburse2,sch2)
+dAMORT2 = create_amort(amount2,payment2,PCycles2,APR2,sch2)
+v = pd.DataFrame.from_dict(dAMORT2 , orient='index')
 
-#for i in daysbetween:
-#    if z == 0:
-#        l = disburse2
-#    else:
-#        (i-l).days
-#        perbet.append((i-l).days)
-#        l = i
-#    z += 1
+l = ''
+z = 0
+daysbetween = [disburse2.strftime('%Y-%m-%d')]
+perbet = []
 
-#perbet
+for index,row in sch2.iterrows():
+    toparse = row['datescheduled'].strftime('%Y-%m-%d')
+    dstamp = parser.parse(toparse)
+    daysbetween.append(dstamp)
 
-#apr = (APR2/100)/365
+for i in daysbetween:
+    if z == 0:
+        l = disburse2
+    else:
+        (i-l).days
+        perbet.append((i-l).days)
+        l = i
+    z += 1
 
-#BegP = amount2
-#BegI = 0
-#CurI = 0
-#PMT = payment2
-#IPMT = 0
-#PPMT = 0
-#endP = 0
-#endI = 0
-#paymentsch2 = create_paymentSch(sch2,'amount')
+perbet
+
+apr = round(((APR2/100)/365),22)
+apr
+BegP = amount2
+BegI = 0
+CurI = 0
+PMT = payment2
+IPMT = 0
+PPMT = 0
+endP = 0
+endI = 0
+paymentsch2 = create_paymentSch(sch2,'amount')
 
     
-#n = 0
-#dAMORT2 = {}
-#for seq in PCycles2:
-#    n += 1
-#    PMT = paymentsch2[1]
-#    #print(n)
-#    BegP = BegP - PPMT
-#    BegI = round(BegI - IPMT,15)
-
-#    CurI = round(BegP * seq * apr,15)
-#    if PMT > BegI + CurI + BegP:
-#        PMT = PMT - round((BegI + CurI + BegP),2)
-#        PPMT = round(BegP,2)
-#        print(BegI + CurI)
-#        IPMT = round(BegI + CurI,2)
-#        endP = 0
-#        endI = 0
-        
-#    elif CurI < PMT:
-#        endI = 0
-#        print(CurI)
-#        IPMT = round(CurI,2)
-#        PPMT = round(PMT - IPMT,2)
-#        endP = BegP - PPMT
-#    else:
-#        print(IPMT)
-#        IPMT = round(CurI,2)
-#        endI = round(CurI - PMT,15)
-#        endP = round(BegP,2)
-            
+n = 0
+dAMORT2 = {}
+for seq in perbet:
+    n += 1
+    PMT = paymentsch2[1]
+    #print(n)
+    BegP = BegP - PPMT
+    BegI = endI
+    CurI = BegP * seq * apr
+    #if n == 3:
+    #    print(apr,seq,BegP)
+    if PMT >= round(BegI + CurI + BegP,2):
+        IPMT = CurI + BegI
+        IPMT2 = round(CurI + BegI,2)
+        PPMT = PMT - round((IPMT2),2)
+        PMT = round(BegP + BegI + CurI,2)
+        endP = 0
+        endI = 0
+        status = 1
+    elif CurI + BegI < PMT:
+        IPMT = CurI + BegI
+        IPMT2 = round(CurI + BegI,2)
+        PPMT = round(PMT - IPMT,2)
+        endP = BegP - PPMT
+        endI = BegI + CurI - round(IPMT,2)
+        status = 2
+    else:
+        IPMT = CurI
+        IPMT2 = round(CurI,2)
+        endI = round(BegI + CurI - PMT,15)
+        endP = round(BegP,2)
+        status = 3
     
-#    dAMORT2[n] = {'BegP': BegP,  'BegI': BegI, 'CurI': CurI, 'PMT': PMT, 'IPMT': IPMT, 'PPMT' : PPMT, 'endP': endP, 'endI': endI}
-#    if PMT > BegI + CurI + BegP:
-#        break
+    dAMORT2[n] = {'Days':seq,'BegP': BegP,  'BegI': BegI, 'CurI': CurI, 'PMT': PMT, 'IPMT': IPMT2, 'PPMT' : PPMT, 'endP': endP, 'endI': endI,'Status':status}
+    if PMT > BegI + CurI + BegP:
+        break
+pd.set_option('display.width', 2000)
+pd.set_option('display.max_columns', 1000)
+v = pd.DataFrame.from_dict(dAMORT2 , orient='index')
+v
