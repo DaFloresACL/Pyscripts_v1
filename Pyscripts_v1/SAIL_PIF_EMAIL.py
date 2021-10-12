@@ -189,17 +189,17 @@ print('sail_pif:  {} for {}, executed at {}'.format(result(df)[0],startdate, tod
 
 
 
-recipients = ['DaFlores@americashloans.net','SLingeman@americashloans.net'] 
-emaillist = [elem.strip().split(',') for elem in recipients]
+#recipients = ['DaFlores@americashloans.net','SLingeman@americashloans.net'] 
+#emaillist = [elem.strip().split(',') for elem in recipients]
 msg2 = MIMEMultipart()
 part1 = MIMEText(body, 'html')
 #part0 = MIMEText(msg)
 #msg2.attach(part0)
 msg2.attach(part1)
 msg2['Subject'] = "Yesterday's Paid in Full SAIL Loans"
-msg2['From'] = 'Finance Team Red Flags - DO NOT REPLY <>'
+msg2['From'] = 'DaFlores@americashloans.net'
 #msg2['To'] = 'SLingeman@AmeriCashLoans.net'
-msg2['To'] = 'DaFlores@americashloans.net; SLingeman@AmeriCashLoans.net; mguenther@AmeriCashLoans.net; RHiatt@AmeriCashLoans.net; HSong@AmeriCashLoans.net'
+msg2['To'] = 'DaFlores@americashloans.net; SLingeman@AmeriCashLoans.net; mguenther@AmeriCashLoans.net; RHiatt@AmeriCashLoans.net; HSong@AmeriCashLoans.net;RRoginela@americashloans.net'
 #msg2['To'] = 'DaFlores@americashloans.net'
 #msg2['To'] = 'RHiatt@AmeriCashLoans.net; SLingeman@AmeriCashLoans.net; mguenther@AmeriCashLoans.net; DaFlores@americashloans.net; HSong@AmeriCashLoans.net;'
 
