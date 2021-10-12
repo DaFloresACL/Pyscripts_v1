@@ -81,34 +81,41 @@ def create_amort(amount,payment,PCycles,APR,sch):
     dAMORT = {}
     for seq in PCycles:
         n += 1
-        PMT = paymentsch[1]
-        #print(n)
-        BegP = BegP - PPMT
-        BegI = endI
-
-        CurI = BegP * seq * apr
-        if PMT >= round(BegI + CurI + BegP,2):
-            IPMT = CurI + BegI
-            IPMT2 = round(CurI + BegI,2)
-            PPMT = PMT - round(IPMT2,2)
-            PMT = round(BegP + BegI + CurI,2)
-            endP = 0
-            endI = 0
-        
-        elif CurI < PMT:
-            IPMT = CurI + BegI
-            IPMT2 = round(CurI + BegI,2)
-            PPMT = round(PMT - IPMT,2)
-            endP = BegP - PPMT
-            endI = BegI + CurI - round(IPMT,2)
-        else:
-            IPMT = CurI
-            IPMT2 = round(CurI,2)
-            endI = round(BegI + CurI - PMT,15)
-            endP = round(BegP,2)
+        PMT = paymentsch[n]
+        CurI = round(BegP * apr,15) * seq 
+        IPMT = CurI + BegI
+        IPMT2 = min(PMT,round(CurI + BegI,2))
+        PPMT = min(BegP,PMT - round((IPMT2),2))
+        endP = round(BegP - PPMT,2)
+        endI = round(BegI + CurI - IPMT2,15)
+        #if n == 3:
+        #    print(apr,seq,BegP)
+        #if PMT >= round(BegI + CurI + BegP,2):
+        #    IPMT = CurI + BegI
+        #    IPMT2 = round(CurI + BegI,2)
+        #    PPMT = PMT - round((IPMT2),2)
+        #    PMT = round(BegP + BegI + CurI,2)
+        #    endP = 0
+        #    endI = 0
+        #    status = 1
+        #elif CurI + BegI < PMT:
+        #    IPMT = CurI + BegI
+        #    IPMT2 = round(CurI + BegI,2)
+        #    PPMT = round(PMT - IPMT,2)
+        #    endP = BegP - PPMT
+        #    endI = BegI + CurI - round(IPMT,2)
+        #    status = 2
+        #else:
+        #    IPMT = CurI
+        #    IPMT2 = round(CurI,2)
+        #    endI = round(BegI + CurI - PMT,15)
+        #    endP = round(BegP,2)
+        #    status = 3
             
     
         dAMORT[n] = {'Days':seq, 'BegP': BegP,  'BegI': BegI, 'CurI': CurI, 'PMT': PMT, 'IPMT': IPMT2, 'PPMT' : PPMT, 'endP': endP, 'endI': endI}
+        BegP = endP
+        BegI = endI
         if PMT > BegI + CurI + BegP:
             break
     return dAMORT
@@ -187,9 +194,9 @@ for index,row in loans.iterrows():
 
     test_dAMORT = create_amort(amount,payment,PCycles,IR,sch)
     IRendP = test_dAMORT[len(test_dAMORT)]['endP']
-    os.chdir(r'\\ac-hq-fs01\users$\daflores\My Documents\Testing\\')
+    os.chdir(r'\\ac-hq-fs01\users$\daflores\My Documents\newtesting\\')
     v = pd.DataFrame.from_dict(test_dAMORT,orient='index')
-    v.to_excel(f'{row.loanno}_{IR}_CalcIRSch.xlsx')
+    v.to_excel(f'{row.loanno}_{IR}_CalcIRSch2.xlsx')
     os.chdir(r'\\ac-hq-fs01\users$\daflores\My Documents\\')
     #for i in range(len(test_dAMORT)):
     #pd.DataFrame.from_dict(test_dAMORT = create_amort(amount,payment,PCycles,IR,sch), orient='index')
@@ -197,10 +204,10 @@ for index,row in loans.iterrows():
     Findings.append(summary)
 
 df = pd.DataFrame(Findings, columns = ['LoanID','LoanNo','LoanAmount','Payment','APR','CalculatedInterestRate','APR_EndingPrincipal','IR_EndingPrincipal'])
-df.to_excel('Findings5.xlsx')
+df.to_excel('Findings6.xlsx')
 
 
-loanid = '7ED1552D-F2D2-49FA-B2EF-8D9672CDA3AB'
+loanid = '930764F7-4BC7-4518-28BF-8D97FB03AAE3'
 sch2 = pd.read_sql(f"select * from LMSScheduledPayments sch where LoanID = '{loanid}' order by DateScheduled",cnxn2)
 pay2 = pd.read_sql(f"select distinct amount from LMSScheduledPayments sch where LoanID = '{loanid}' ",cnxn2)
 disburse2 = parser.parse('2021-01-13 00:00:00.000')
@@ -208,6 +215,7 @@ loandf = pd.read_sql(f"select * from v_PosAPR_NegCalcIR sch where LoanID = '{loa
 disburse2 = parser.parse(loandf['loandisbursementdatetimecst'][0].strftime('%Y-%m-%d'))
 
 APR2 = loandf['apr'][0] #0.0010
+APR2 = 34.8055 #0.0010
 amount2 = loandf['loanamount'][0] #8000
 payment2 = pay2['amount'][len(pay2)-1] #666.67
 PCycles2 = create_NPER(disburse2,sch2)
@@ -252,36 +260,42 @@ n = 0
 dAMORT2 = {}
 for seq in perbet:
     n += 1
-    PMT = paymentsch2[1]
+    PMT = paymentsch2[n]
     #print(n)
-    BegP = BegP - PPMT
-    BegI = endI
-    CurI = BegP * seq * apr
+    CurI = round(BegP * apr,15) * seq
+    IPMT = CurI + BegI
+    IPMT2 = min(PMT,round(CurI + BegI,2))
+    PPMT = min(BegP,PMT - round((IPMT2),2))
+    endP = round(BegP - PPMT,2)
+    endI = round(BegI + CurI - IPMT2,15)
+
     #if n == 3:
     #    print(apr,seq,BegP)
-    if PMT >= round(BegI + CurI + BegP,2):
-        IPMT = CurI + BegI
-        IPMT2 = round(CurI + BegI,2)
-        PPMT = PMT - round((IPMT2),2)
-        PMT = round(BegP + BegI + CurI,2)
-        endP = 0
-        endI = 0
-        status = 1
-    elif CurI + BegI < PMT:
-        IPMT = CurI + BegI
-        IPMT2 = round(CurI + BegI,2)
-        PPMT = round(PMT - IPMT,2)
-        endP = BegP - PPMT
-        endI = BegI + CurI - round(IPMT,2)
-        status = 2
-    else:
-        IPMT = CurI
-        IPMT2 = round(CurI,2)
-        endI = round(BegI + CurI - PMT,15)
-        endP = round(BegP,2)
-        status = 3
+    #if PMT >= round(BegI + CurI + BegP,2):
+    #    IPMT = CurI + BegI
+    #    IPMT2 = round(CurI + BegI,2)
+    #    PPMT = PMT - round((IPMT2),2)
+    #    PMT = round(BegP + BegI + CurI,2)
+    #    endP = 0
+    #    endI = 0
+    #    status = 1
+    #elif CurI + BegI < PMT:
+    #    IPMT = CurI + BegI
+    #    IPMT2 = round(CurI + BegI,2)
+    #    PPMT = round(PMT - IPMT,2)
+    #    endP = BegP - PPMT
+    #    endI = BegI + CurI - round(IPMT,2)
+    #    status = 2
+    #else:
+    #    IPMT = CurI
+    #    IPMT2 = round(CurI,2)
+    #    endI = round(BegI + CurI - PMT,15)
+    #    endP = round(BegP,2)
+    #    status = 3
     
-    dAMORT2[n] = {'Days':seq,'BegP': BegP,  'BegI': BegI, 'CurI': CurI, 'PMT': PMT, 'IPMT': IPMT2, 'PPMT' : PPMT, 'endP': endP, 'endI': endI,'Status':status}
+    dAMORT2[n] = {'Days':seq,'BegP': BegP,  'BegI': BegI, 'CurI': CurI, 'PMT': PMT, 'IPMT': IPMT2, 'PPMT' : PPMT, 'endP': round(endP,2), 'endI': endI}
+    BegP = endP
+    BegI = endI
     if PMT > BegI + CurI + BegP:
         break
 pd.set_option('display.width', 2000)

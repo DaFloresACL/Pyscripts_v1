@@ -28,10 +28,16 @@
     <Compile Include="Distance.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SAIL_PIF_EMAIL.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="samIRCalc.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TextXMLReader.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="txtfilesintoxml.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="txt_into_xml.py">

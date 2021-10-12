@@ -9,15 +9,17 @@ import os
 import urllib
 from bs4 import BeautifulSoup
 
-folder = r'\\ac-hq-fs01\users$\daflores\My Documents\XMLDataResponseRequests\\'
+folder = r'\\ac-hq-fs01\users$\daflores\My Documents\XMLData2\\'
 os.chdir(folder)
 os.getcwd()
 
-writer = pd.ExcelWriter(r'\\ac-hq-fs01\users$\daflores\My Documents\\DataDictionary_3.xlsx', engine='xlsxwriter')
+writer = pd.ExcelWriter(r'\\ac-hq-fs01\users$\daflores\My Documents\\DataDictionary2_2.xlsx', engine='xlsxwriter')
 
 sub_dir = os.listdir(folder)
 folders = []
 for dir in sub_dir:
+    if dir == 'used':
+        continue
 #    print(dir)
     for files in os.listdir(dir):
         if files == 'ReadMe.txt':
@@ -45,11 +47,12 @@ for dir in sub_dir:
                     df = df[['Folder','File','SentFor','Fields','Example']]
                     sheetname = files + '\\' + file
                     df.to_excel(writer,sheet_name = sheetname[0:31])
-                    if dir in folders:
-                        continue
-                    else:    
-                        df.to_excel(writer,sheet_name = sheetname[0:31])
-                        folders.append(dir)
+                    #if dir in folders:
+                    #    True
+                    #    #continue
+                    #else:    
+                    df.to_excel(writer,sheet_name = sheetname[0:31])
+                    folders.append(dir)
 
         else:
             with open(folder[:-1] + dir + r'\\' + files) as fd:
@@ -71,11 +74,12 @@ for dir in sub_dir:
                 df['SentFor'] = sent
                 df = df[['Folder','File','SentFor','Fields','Example']]
                 sheetname = files
-                if dir in folders:
-                    continue
-                else:    
-                    df.to_excel(writer,sheet_name = sheetname[0:31])
-                    folders.append(dir)
+                #if dir in folders:
+                #    True
+                #    #continue
+                #else:    
+                df.to_excel(writer,sheet_name = sheetname[0:31])
+                folders.append(dir)
 
 writer.save()
 writer.close()
