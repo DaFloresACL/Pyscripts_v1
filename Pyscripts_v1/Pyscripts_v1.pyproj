@@ -22,6 +22,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ACF_Files.py" />
+    <Compile Include="AFC_CallList_StoreAssign.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="calculate interest rate.py">
       <SubType>Code</SubType>
     </Compile>
@@ -29,6 +32,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SAIL_PIF_EMAIL.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SAIl_Projection_by_location.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="samIRCalc.py">

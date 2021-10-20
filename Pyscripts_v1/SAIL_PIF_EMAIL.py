@@ -66,8 +66,9 @@ INTO	#Loans
 FROM	LMSLoans a
 inner	join #Locs b on b.LocationID = a.OriginatingLocationID
 inner	join LMSProducts c on c.ProductID = a.ProductID
-WHERE	c.Name like '%SAIL%' -- exclude WLM loan
-and	a.PaidInFullDate between @Start and @End
+--WHERE	c.Name like '%SAIL%' -- exclude WLM loan
+--and	
+where a.PaidInFullDate between @Start and @End
 and	a.StatusID not in (11,12,14) -- converted
 and	a.LoanDisbursementStatus = 2 -- funded
 
@@ -115,7 +116,7 @@ df = pd.read_sql(sail_pif, cnxn)  # PROD PURPOSES ONLY
 
 df['Current Balance'] = df['Current Balance'].apply(lambda x: "${:.2f}".format((x/1)))
 
-body = 'This is a list of SAIL loans that were Paid in Full yesterday.' +"""
+body = 'This is a list of SAIL tenant loans that were Paid in Full yesterday.' +"""
 <html>
 <head>
 </head>
@@ -127,8 +128,8 @@ body = 'This is a list of SAIL loans that were Paid in Full yesterday.' +"""
 </html>
 """.format(build_table(df, 'blue_light', width = '130px')) + '\n' + '\n Please do not respond to this email. Any concerns over the email, contact Daniel Flores, Ralph Gozun, or Sam Lingeman.' + '\n Thank you.'
 # Set filename and filepath
-filename = 'SAIL_PIF_test' + str(date.today().strftime('%Y-%m-%d')) + '.xlsx'
-filepath = fr'\\ac-hq-fs01\accounting\Finance\003 Reporting\001 Daily Reporting\SAIL Daily Reporting\SAIL_PIF\{filename}'
+#filename = 'SAIL_PIF_test' + str(date.today().strftime('%Y-%m-%d')) + '.xlsx'
+#filepath = fr'\\ac-hq-fs01\accounting\Finance\003 Reporting\001 Daily Reporting\SAIL Daily Reporting\SAIL_PIF\{filename}'
 
 
 # set email subject
@@ -184,7 +185,7 @@ def result(df):
 #s.quit()
 
 # log output
-print('sail_pif:  {} for {}, executed at {}'.format(result(df)[0],startdate, today.strftime('%Y-%m-%d %H:%M:%S')))
+#print('sail_pif:  {} for {}, executed at {}'.format(result(df)[0],startdate, today.strftime('%Y-%m-%d %H:%M:%S')))
 
 
 
@@ -199,10 +200,12 @@ msg2.attach(part1)
 msg2['Subject'] = "Yesterday's Paid in Full SAIL Loans"
 msg2['From'] = 'DaFlores@americashloans.net'
 #msg2['To'] = 'SLingeman@AmeriCashLoans.net'
-msg2['To'] = 'DaFlores@americashloans.net; SLingeman@AmeriCashLoans.net; mguenther@AmeriCashLoans.net; RHiatt@AmeriCashLoans.net; HSong@AmeriCashLoans.net;RRoginela@americashloans.net'
-#msg2['To'] = 'DaFlores@americashloans.net'
+#msg2['To'] = 'DaFlores@americashloans.net; SLingeman@AmeriCashLoans.net; mguenther@AmeriCashLoans.net; RHiatt@AmeriCashLoans.net; HSong@AmeriCashLoans.net'
+msg2['To'] = 'DaFlores@americashloans.net'
 #msg2['To'] = 'RHiatt@AmeriCashLoans.net; SLingeman@AmeriCashLoans.net; mguenther@AmeriCashLoans.net; DaFlores@americashloans.net; HSong@AmeriCashLoans.net;'
 
 server = smtplib.SMTP('email.americashloans.net', port=25)
 
-server.sendmail(msg2['From'],msg2['To'], msg2.as_string())
+server.sendmail(msg2['From'],msg2['To'].split(";"), msg2.as_string())
+
+server.quit()
