@@ -6,8 +6,8 @@ import requests
 import json
 import ast
 import pyodbc
-#import pandas as pd2
-import modin.pandas as pd
+import pandas as pd
+#import modin.pandas as pd
 LMS_db_config = 'DRIVER={SQL Server};SERVER=AC-PC-097;DATABASE=FinanceTeamDB;Trusted_Connection=yes;'
 cnxn = pyodbc.connect(LMS_db_config)
 
@@ -18,8 +18,8 @@ left outer join AFC_CustList_geometry b
 on a.uniqueID = b.uniqueID
 
 
-where CustomerAddress not like 'po%' and CustomerAddress not like 'p o%' and CustomerAddress not like 
-'%box%' and CustomerAddress not like '%address%' and CustomerAddress not like '%addy%'
+where a.CustomerAddress not like 'po%' and a.CustomerAddress not like 'p o%' and a.CustomerAddress not like 
+'%box%' and a.CustomerAddress not like '%address%' and a.CustomerAddress not like '%addy%'
 and b.uniqueID is null
 ''' 
 
