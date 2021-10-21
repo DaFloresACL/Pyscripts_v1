@@ -1,12 +1,13 @@
-#google api key AIzaSyAkVbIqLQdmn0mBU7hEDBbFAyFetu3nrJ4
 
-g_apikey = "AIzaSyAkVbIqLQdmn0mBU7hEDBbFAyFetu3nrJ4"
+
+g_apikey = ""
 
 import requests
 import json
 import ast
 import pyodbc
-import pandas as pd
+#import pandas as pd2
+import modin.pandas as pd
 LMS_db_config = 'DRIVER={SQL Server};SERVER=AC-PC-097;DATABASE=FinanceTeamDB;Trusted_Connection=yes;'
 cnxn = pyodbc.connect(LMS_db_config)
 
@@ -127,7 +128,7 @@ uniqueID_query = '''
 select
 	*
 	from AFC_CustList_geometry
-    where uniqueID = 'AFC-156158'
+    where closeststore is null
 '''
 
 
@@ -145,18 +146,13 @@ for index_u,row_u in uniqueID.iterrows():
         #print(store_dict)
 
     store_sort = dict(sorted(store_dict.items(), key=lambda item: item[1]))
-    store_sort
+    #store_sort
     closest = next(iter(store_sort))
     values = [row_u.UniqueID,closest, store_sort[closest]]
     
     execProc ('exec update_AFC_CustList_geometry_ClosestStore ?,?,?',values)
 
 
-
-coords_1 = (38.315830,-88.923640)
-coords_2 = (38.7137680,-87.7547163 )
-km = round(geopy.distance.distance(coords_1, coords_2).km,2)
-store_dict[row_l.Location] = km * 0.621371
 
 
 
