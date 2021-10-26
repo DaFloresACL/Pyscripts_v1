@@ -204,101 +204,101 @@ for index,row in loans.iterrows():
     Findings.append(summary)
 
 df = pd.DataFrame(Findings, columns = ['LoanID','LoanNo','LoanAmount','Payment','APR','CalculatedInterestRate','APR_EndingPrincipal','IR_EndingPrincipal'])
-df.to_excel('Findings6.xlsx')
+df.to_excel('Findings_10.25.2021 v3.xlsx')
 
 
 loanid = '930764F7-4BC7-4518-28BF-8D97FB03AAE3'
-sch2 = pd.read_sql(f"select * from LMSScheduledPayments sch where LoanID = '{loanid}' order by DateScheduled",cnxn2)
-pay2 = pd.read_sql(f"select distinct amount from LMSScheduledPayments sch where LoanID = '{loanid}' ",cnxn2)
-disburse2 = parser.parse('2021-01-13 00:00:00.000')
-loandf = pd.read_sql(f"select * from v_PosAPR_NegCalcIR sch where LoanID = '{loanid}' ",cnxn2)
-disburse2 = parser.parse(loandf['loandisbursementdatetimecst'][0].strftime('%Y-%m-%d'))
+#sch2 = pd.read_sql(f"select * from LMSScheduledPayments sch where LoanID = '{loanid}' order by DateScheduled",cnxn2)
+#pay2 = pd.read_sql(f"select distinct amount from LMSScheduledPayments sch where LoanID = '{loanid}' ",cnxn2)
+#disburse2 = parser.parse('2021-01-13 00:00:00.000')
+#loandf = pd.read_sql(f"select * from v_PosAPR_NegCalcIR sch where LoanID = '{loanid}' ",cnxn2)
+#disburse2 = parser.parse(loandf['loandisbursementdatetimecst'][0].strftime('%Y-%m-%d'))
 
-APR2 = loandf['apr'][0] #0.0010
-APR2 = 34.8055 #0.0010
-amount2 = loandf['loanamount'][0] #8000
-payment2 = pay2['amount'][len(pay2)-1] #666.67
-PCycles2 = create_NPER(disburse2,sch2)
-dAMORT2 = create_amort(amount2,payment2,PCycles2,APR2,sch2)
-v = pd.DataFrame.from_dict(dAMORT2 , orient='index')
+#APR2 = loandf['apr'][0] #0.0010
+#APR2 = 34.8055 #0.0010
+#amount2 = loandf['loanamount'][0] #8000
+#payment2 = pay2['amount'][len(pay2)-1] #666.67
+#PCycles2 = create_NPER(disburse2,sch2)
+#dAMORT2 = create_amort(amount2,payment2,PCycles2,APR2,sch2)
+#v = pd.DataFrame.from_dict(dAMORT2 , orient='index')
 
-l = ''
-z = 0
-daysbetween = [disburse2.strftime('%Y-%m-%d')]
-perbet = []
+#l = ''
+#z = 0
+#daysbetween = [disburse2.strftime('%Y-%m-%d')]
+#perbet = []
 
-for index,row in sch2.iterrows():
-    toparse = row['datescheduled'].strftime('%Y-%m-%d')
-    dstamp = parser.parse(toparse)
-    daysbetween.append(dstamp)
+#for index,row in sch2.iterrows():
+#    toparse = row['datescheduled'].strftime('%Y-%m-%d')
+#    dstamp = parser.parse(toparse)
+#    daysbetween.append(dstamp)
 
-for i in daysbetween:
-    if z == 0:
-        l = disburse2
-    else:
-        (i-l).days
-        perbet.append((i-l).days)
-        l = i
-    z += 1
+#for i in daysbetween:
+#    if z == 0:
+#        l = disburse2
+#    else:
+#        (i-l).days
+#        perbet.append((i-l).days)
+#        l = i
+#    z += 1
 
-perbet
+#perbet
 
-apr = round(((APR2/100)/365),22)
-apr
-BegP = amount2
-BegI = 0
-CurI = 0
-PMT = payment2
-IPMT = 0
-PPMT = 0
-endP = 0
-endI = 0
-paymentsch2 = create_paymentSch(sch2,'amount')
+#apr = round(((APR2/100)/365),22)
+#apr
+#BegP = amount2
+#BegI = 0
+#CurI = 0
+#PMT = payment2
+#IPMT = 0
+#PPMT = 0
+#endP = 0
+#endI = 0
+#paymentsch2 = create_paymentSch(sch2,'amount')
 
     
-n = 0
-dAMORT2 = {}
-for seq in perbet:
-    n += 1
-    PMT = paymentsch2[n]
-    #print(n)
-    CurI = round(BegP * apr,15) * seq
-    IPMT = CurI + BegI
-    IPMT2 = min(PMT,round(CurI + BegI,2))
-    PPMT = min(BegP,PMT - round((IPMT2),2))
-    endP = round(BegP - PPMT,2)
-    endI = round(BegI + CurI - IPMT2,15)
+#n = 0
+#dAMORT2 = {}
+#for seq in perbet:
+#    n += 1
+#    PMT = paymentsch2[n]
+#    #print(n)
+#    CurI = round(BegP * apr,15) * seq
+#    IPMT = CurI + BegI
+#    IPMT2 = min(PMT,round(CurI + BegI,2))
+#    PPMT = min(BegP,PMT - round((IPMT2),2))
+#    endP = round(BegP - PPMT,2)
+#    endI = round(BegI + CurI - IPMT2,15)
 
-    #if n == 3:
-    #    print(apr,seq,BegP)
-    #if PMT >= round(BegI + CurI + BegP,2):
-    #    IPMT = CurI + BegI
-    #    IPMT2 = round(CurI + BegI,2)
-    #    PPMT = PMT - round((IPMT2),2)
-    #    PMT = round(BegP + BegI + CurI,2)
-    #    endP = 0
-    #    endI = 0
-    #    status = 1
-    #elif CurI + BegI < PMT:
-    #    IPMT = CurI + BegI
-    #    IPMT2 = round(CurI + BegI,2)
-    #    PPMT = round(PMT - IPMT,2)
-    #    endP = BegP - PPMT
-    #    endI = BegI + CurI - round(IPMT,2)
-    #    status = 2
-    #else:
-    #    IPMT = CurI
-    #    IPMT2 = round(CurI,2)
-    #    endI = round(BegI + CurI - PMT,15)
-    #    endP = round(BegP,2)
-    #    status = 3
+#    #if n == 3:
+#    #    print(apr,seq,BegP)
+#    #if PMT >= round(BegI + CurI + BegP,2):
+#    #    IPMT = CurI + BegI
+#    #    IPMT2 = round(CurI + BegI,2)
+#    #    PPMT = PMT - round((IPMT2),2)
+#    #    PMT = round(BegP + BegI + CurI,2)
+#    #    endP = 0
+#    #    endI = 0
+#    #    status = 1
+#    #elif CurI + BegI < PMT:
+#    #    IPMT = CurI + BegI
+#    #    IPMT2 = round(CurI + BegI,2)
+#    #    PPMT = round(PMT - IPMT,2)
+#    #    endP = BegP - PPMT
+#    #    endI = BegI + CurI - round(IPMT,2)
+#    #    status = 2
+#    #else:
+#    #    IPMT = CurI
+#    #    IPMT2 = round(CurI,2)
+#    #    endI = round(BegI + CurI - PMT,15)
+#    #    endP = round(BegP,2)
+#    #    status = 3
     
-    dAMORT2[n] = {'Days':seq,'BegP': BegP,  'BegI': BegI, 'CurI': CurI, 'PMT': PMT, 'IPMT': IPMT2, 'PPMT' : PPMT, 'endP': round(endP,2), 'endI': endI}
-    BegP = endP
-    BegI = endI
-    if PMT > BegI + CurI + BegP:
-        break
-pd.set_option('display.width', 2000)
-pd.set_option('display.max_columns', 1000)
-v = pd.DataFrame.from_dict(dAMORT2 , orient='index')
-v
+#    dAMORT2[n] = {'Days':seq,'BegP': BegP,  'BegI': BegI, 'CurI': CurI, 'PMT': PMT, 'IPMT': IPMT2, 'PPMT' : PPMT, 'endP': round(endP,2), 'endI': endI}
+#    BegP = endP
+#    BegI = endI
+#    if PMT > BegI + CurI + BegP:
+#        break
+#pd.set_option('display.width', 2000)
+#pd.set_option('display.max_columns', 1000)
+#v = pd.DataFrame.from_dict(dAMORT2 , orient='index')
+#v

@@ -31,10 +31,13 @@
     <Compile Include="Distance.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="PACER_API.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SAIL_PIF_EMAIL.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SAIl_Projection_by_location.py">
+    <Compile Include="SAIL_Projection_by_location.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="samIRCalc.py">

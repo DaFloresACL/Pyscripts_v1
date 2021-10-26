@@ -1,6 +1,5 @@
 
-
-g_apikey = ""
+g_apikey = "AIzaSyAkVbIqLQdmn0mBU7hEDBbFAyFetu3nrJ4"
 
 import requests
 import json
@@ -121,6 +120,7 @@ select distinct
 	,HomeLatitude
 	,HomeLongitude
 	from v_Location_Distance
+    where StateofBusinessID = 13
 '''
 
 
