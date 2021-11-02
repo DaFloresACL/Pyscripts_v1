@@ -31,6 +31,9 @@
     <Compile Include="Distance.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="EOM_LoanProd_Spreadsheet.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="PACER_API.py">
       <SubType>Code</SubType>
     </Compile>
@@ -41,6 +44,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="samIRCalc.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Test Week FinBond.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TextXMLReader.py">
