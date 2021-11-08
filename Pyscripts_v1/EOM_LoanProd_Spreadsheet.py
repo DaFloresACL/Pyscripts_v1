@@ -26,7 +26,7 @@ connection = engine.connect()
 query = f'''
 SET NOCOUNT ON
 
-declare @EOM date = eomonth('2018-02-28',0)
+declare @EOM date = eomonth('{eom}',0)
 if object_id('tempdb..#Loans') is not null drop table #Loans
 select	LoanID
 INTO	#Loans
@@ -48,6 +48,7 @@ from	#Loans a
 Inner	join LoanTransactions b on a.LoanID = b.LoanID
 where	1 not in (HasBeenOffset, IsAnOffset, HasBeenReversed)
 and	TransactionTypeID in (6,7,8,9,10,26,36,42,57)
+and posteddate <= '{eom}'
 group by b.LoanID
 
 
@@ -118,4 +119,4 @@ except:
 os.chdir(current_dir)
 os.getcwd()
 
-df.to_excel(f'EOM_Loans_{eom[0:7]}.xlsx')
+df.to_excel(f'EOM_Loans_{eom}.xlsx')

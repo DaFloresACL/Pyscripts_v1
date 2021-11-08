@@ -11,6 +11,7 @@
     <OutputPath>.</OutputPath>
     <Name>Pyscripts_v1</Name>
     <RootNamespace>Pyscripts_v1</RootNamespace>
+    <TestFramework>Pytest</TestFramework>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
