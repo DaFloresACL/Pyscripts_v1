@@ -35,7 +35,10 @@
     <Compile Include="EOM_LoanProd_Spreadsheet.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PACER_API.py">
+    <Compile Include="PACER_API_live.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PACER_API_QA.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SAIL_PIF_EMAIL.py">
