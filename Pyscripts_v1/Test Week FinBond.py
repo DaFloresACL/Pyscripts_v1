@@ -243,7 +243,7 @@ for i in range(0,len(ReportParams)):
     wb.Save()
     wb.Close()
 
-os.remove(CurrentWeekTempWB)
+#os.remove(CurrentWeekTempWB)
 
 ## COPY GM FILE FROM PRIOR WEEK TO CURRENT WEEK DIRECTORY
 PriorWeekFileGM = Filepath_Reporting_PriorWk + ReportFilenamePrefix_PriorWk_gm + rpt_GM_suffix
