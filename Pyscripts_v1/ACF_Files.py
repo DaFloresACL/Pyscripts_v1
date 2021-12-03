@@ -29,7 +29,7 @@ sms_info = pd.read_csv(r'9000 customerdata_part3\sms_info.csv')
 conn_str = (
     r'Driver=ODBC Driver 17 for SQL Server;'
     r'Server= AC-PC-097;'
-    r'Database=Spreadsheets;'
+    r'Database=FinanceTeamDB;'
     r'Trusted_Connection=yes;'
 )
 quoted_conn_str = urllib.parse.quote_plus(conn_str)
@@ -37,7 +37,7 @@ engine = create_engine(f'mssql+pyodbc:///?odbc_connect={quoted_conn_str}')
 cnxn = engine.connect()
 
 engine = create_engine('mssql+pyodbc://AC-PC-097/FinanceTeamDB')
-test = pd.read_sql('select top 1 * from lmsloans', cnxn2)
+test = pd.read_sql('select top 10 LoanID from lmsloans', cnxn)
 ach_info.to_sql('ACH_Info_1_stg',con = cnxn,if_exists = 'replace', index=False)
 loan_info.to_sql('Loan_Info_1_stg',con = cnxn,if_exists = 'replace', index=False)
 schedule_info.to_sql('Schedule_Info_1_stg',con = cnxn,if_exists = 'replace', index=False)

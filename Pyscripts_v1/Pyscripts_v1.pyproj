@@ -35,6 +35,9 @@
     <Compile Include="EOM_LoanProd_Spreadsheet.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="LGCY_Update.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="PACER_API_live.py">
       <SubType>Code</SubType>
     </Compile>

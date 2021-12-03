@@ -71,6 +71,7 @@ inner	join LMSProducts c on c.ProductID = a.ProductID
 where a.PaidInFullDate between @Start and @End
 and	a.StatusID not in (11,12,14) -- converted
 and	a.LoanDisbursementStatus = 2 -- funded
+and a.disbursementdate >= rpt.ToUTC('2021-08-20')
 
 -- pulling in loan status table
 IF OBJECT_ID('tempdb..#LnStatus','U') IS NOT NULL DROP TABLE #LnStatus
