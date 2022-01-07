@@ -8,11 +8,13 @@ from sqlalchemy import create_engine
 import os
 import urllib
 
-pulldate = '12.01.2021'
+pulldate = '01.05.2022'
 os.chdir(rf'\\ac-hq-fs01\users$\daflores\My Documents\LGCY Python\{pulldate}\\')
 os.getcwd()
 
+#list column names in table and placed in order as list
 fee_col = ['DB', 'LoanID', 'FeesID', 'Type', 'Date', 'Amount', 'Reference', 'Reference_', 'balance', 'CreateDate', 'UpdateDate']
+#create df with csv and have col names defined
 tblFee = pd.read_csv(rf'LGCYtblFee_{pulldate}.csv', names=fee_col)
 
 history_col = ['DB', 'HistoryID', 'CustomerID', 'Date', 'Loan', 'Location', 'Action', 'Notes', 'Name', 'CreatedID', 'Created', 'EditedID', 'Edited', 'Balance', 'msrepl_tran_version']
@@ -34,6 +36,7 @@ tblusers = pd.read_csv(rf'LGCYtblUsers_{pulldate}.csv', names = users_col)
 #                        "Database=ACL.LMS;"
 #                        "Trusted_Connection=yes;")
 
+#connection string to 097.FinanceTeamDB
 conn_str = (
     r'Driver=ODBC Driver 17 for SQL Server;'
     r'Server= AC-PC-097;'
@@ -44,29 +47,13 @@ quoted_conn_str = urllib.parse.quote_plus(conn_str)
 engine = create_engine(f'mssql+pyodbc:///?odbc_connect={quoted_conn_str}')
 cnxn = engine.connect()
 engine = create_engine('mssql+pyodbc://AC-PC-097/FinanceTeamDB')
+#pandas command to upload DF to table, append add rows & replace drops table then recreates it
 tblFee.to_sql('test_tblFee',con = cnxn,if_exists = 'append', index=False)
 tblHistory.to_sql('test_tblHistory',con = cnxn,if_exists = 'append', index=False)
 tblLoans.to_sql('test_tblLoan',con = cnxn,if_exists = 'append', index=False)
 tblPayments.to_sql('test_tblPayments',con = cnxn,if_exists = 'append', index=False)
 tblusers.to_sql('test_tblusers',con = cnxn,if_exists = 'replace', index=False)
 
-#asrcall_col = ['UniqueID', 'Tenant', 'FirstName', 'LastName', 'HomePhone', 'WorkPhone', 'WorkExtension', 'CellPhone', 'Status', 'StoreNumber', 'StoreName', 'StorePhoneNumber', 'EmployerName', 'LastCallDate', 'ST', 'LoanType', 'Last4', 'Type', 'Date', 'Period']
-
-
-#os.chdir(r'\\AC-PC-097\imports\\')
-#os.getcwd()
-#a = pd.read_csv('asr.csv', sep = '\t', lineterminator= '\r')
-
-#a.to_sql('testing',con = cnxn,if_exists = 'append', index=False)
-
-#b = pd.read_csv('coll.csv', sep = '\t', lineterminator= '\r')
-
-#b['Home'] = b['Home'].str[1:]
-
-#b.to_sql('testing2',con = cnxn,if_exists = 'append', index=False)
-
-#c = pd.read_csv('ASRApp.csv', sep = '\t', lineterminator= '\r')
-#c.to_sql('testing3',con = cnxn,if_exists = 'replace', index=False)
 
 
 

@@ -47,3 +47,21 @@ email_info.to_sql('Email_Info_2_stg',con = cnxn,if_exists = 'replace', index=Fal
 transactions_info.to_sql('Transactions_Info_2_stg',con = cnxn,if_exists = 'replace', index=False)
 mail.to_sql('mail_3_stg',con = cnxn,if_exists = 'replace', index=False)
 sms_info.to_sql('sms_Info_3_stg',con = cnxn,if_exists = 'replace', index=False)
+
+#asrcall_col = ['UniqueID', 'Tenant', 'FirstName', 'LastName', 'HomePhone', 'WorkPhone', 'WorkExtension', 'CellPhone', 'Status', 'StoreNumber', 'StoreName', 'StorePhoneNumber', 'EmployerName', 'LastCallDate', 'ST', 'LoanType', 'Last4', 'Type', 'Date', 'Period']
+
+
+#os.chdir(r'\\AC-PC-097\imports\\')
+#os.getcwd()
+#a = pd.read_csv('asr.csv', sep = '\t', lineterminator= '\r')
+
+#a.to_sql('testing',con = cnxn,if_exists = 'append', index=False)
+
+#b = pd.read_csv('coll.csv', sep = '\t', lineterminator= '\r')
+
+#b['Home'] = b['Home'].str[1:]
+
+#b.to_sql('testing2',con = cnxn,if_exists = 'append', index=False)
+
+#c = pd.read_csv('ASRApp.csv', sep = '\t', lineterminator= '\r')
+#c.to_sql('testing3',con = cnxn,if_exists = 'replace', index=False)
