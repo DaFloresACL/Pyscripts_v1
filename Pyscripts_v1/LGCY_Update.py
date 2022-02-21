@@ -8,7 +8,7 @@ from sqlalchemy import create_engine
 import os
 import urllib
 
-pulldate = '01.05.2022'
+pulldate = '02.01.2022'
 os.chdir(rf'\\ac-hq-fs01\users$\daflores\My Documents\LGCY Python\{pulldate}\\')
 os.getcwd()
 
@@ -27,9 +27,9 @@ payments_col = ['DB', 'paymentid', 'LoanID', 'PostedDate', 'PaymentNo', 'TrxType
 tblPayments = pd.read_csv(rf'LGCYtblPayments_{pulldate}.csv', names = payments_col)
 
 
-users_col = ['DB', 'UserID', 'User', 'Name', 'FirstName', 'LastName', 'LocationID', 'Location', 'Password', 'Code', 'Group', 'Active', 'LoansInstallment', 'CollectionsInstallment', 'LoansPayday', 'CollectionsPayday', 'LoansDays', 'CollectionsDays', 'Log', 'Logon', 'Logoff', 'Collector', 'User_ID', 'Location_ID', 'Last Edit', 'msrepl_tran_version', 'EmployeeNo'
-]
-tblusers = pd.read_csv(rf'LGCYtblUsers_{pulldate}.csv', names = users_col)
+#users_col = ['DB', 'UserID', 'User', 'Name', 'FirstName', 'LastName', 'LocationID', 'Location', 'Password', 'Code', 'Group', 'Active', 'LoansInstallment', 'CollectionsInstallment', 'LoansPayday', 'CollectionsPayday', 'LoansDays', 'CollectionsDays', 'Log', 'Logon', 'Logoff', 'Collector', 'User_ID', 'Location_ID', 'Last Edit', 'msrepl_tran_version', 'EmployeeNo'
+#]
+#tblusers = pd.read_csv(rf'LGCYtblUsers_{pulldate}.csv', names = users_col)
 
 #cnxn2 = pypyodbc.connect("Driver={SQL Server Native Client 11.0};"
 #                        "Server=secondary.database.windows.net;"
@@ -52,7 +52,7 @@ tblFee.to_sql('test_tblFee',con = cnxn,if_exists = 'append', index=False)
 tblHistory.to_sql('test_tblHistory',con = cnxn,if_exists = 'append', index=False)
 tblLoans.to_sql('test_tblLoan',con = cnxn,if_exists = 'append', index=False)
 tblPayments.to_sql('test_tblPayments',con = cnxn,if_exists = 'append', index=False)
-tblusers.to_sql('test_tblusers',con = cnxn,if_exists = 'replace', index=False)
+#tblusers.to_sql('test_tblusers',con = cnxn,if_exists = 'replace', index=False)
 
 
 

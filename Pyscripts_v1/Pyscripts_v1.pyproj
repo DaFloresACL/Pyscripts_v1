@@ -29,10 +29,16 @@
     <Compile Include="calculate interest rate.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DataX_CleanUp.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Distance.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EOM_LoanProd_Spreadsheet.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FinBondWeekly_mod.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="LGCY_Update.py">
@@ -45,6 +51,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Pandas_Test.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RenameFiles.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SAIL_PIF_EMAIL.py">
