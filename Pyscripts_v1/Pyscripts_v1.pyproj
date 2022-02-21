@@ -41,6 +41,9 @@
     <Compile Include="FinBondWeekly_mod.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FinBondWeekly_standard.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="LGCY_Update.py">
       <SubType>Code</SubType>
     </Compile>
