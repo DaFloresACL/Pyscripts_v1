@@ -44,6 +44,12 @@
     <Compile Include="FinBondWeekly_standard.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IFR_Script.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IFR_Script_v2.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="LGCY_Update.py">
       <SubType>Code</SubType>
     </Compile>
@@ -56,7 +62,13 @@
     <Compile Include="Pandas_Test.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="RecoveryAnalysisOutput.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="RenameFiles.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SailCalculator.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SAIL_PIF_EMAIL.py">

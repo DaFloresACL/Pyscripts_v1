@@ -85,7 +85,7 @@ del(sql_StoreSalesReport)
 # STAGE DATE DIMENSION
 from datetime import date
 
-Today = datetime(2022, 2,20)  # For manual week.  This must match SQL being executed
+Today = datetime(2022,3,20)  # For manual week.  This must match SQL being executed
 #Today = datetime.today()
 Today_nthDayOfYear = Today.timetuple().tm_yday
 

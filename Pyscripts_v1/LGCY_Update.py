@@ -8,7 +8,7 @@ from sqlalchemy import create_engine
 import os
 import urllib
 
-pulldate = '02.01.2022'
+pulldate = '03.01.2022'
 os.chdir(rf'\\ac-hq-fs01\users$\daflores\My Documents\LGCY Python\{pulldate}\\')
 os.getcwd()
 
@@ -23,7 +23,7 @@ tblHistory = pd.read_csv(rf'LGCYtblHistory_{pulldate}.csv', names=history_col)
 loans_col = ['DB', 'LoanID', 'CustomerID', 'Number', 'Date', 'LoanAmount', 'CheckNumber', 'CheckAmount', 'Type', 'Interest', 'Balance', 'Unpaid', 'LastDate', 'PaymentsMade', 'Refinance', 'Status', 'StatusChanged', 'Sent', 'ChargedOff', 'Location', 'ReceivedBy', 'Received', 'CreatedID', 'Created', 'EditedID', 'Edited', 'msrepl_tran_version', 'FirstPayment', 'LastPayment', 'Payment', 'Payments', 'PayFrequency', 'PayDate', 'PayDay1', 'PayDay2', 'PayFirst', 'PayLast', 'PayDay', 'ACH', 'Notify', 'Term', 'Rate', 'ACHYN', 'DueAmount', 'DueDays', 'Fees', 'PP', 'Fixed', 'Loan', 'Charge', 'TransactionID', 'Event']
 tblLoans = pd.read_csv(rf'LGCYtblLoans_{pulldate}.csv', names = loans_col)
 
-payments_col = ['DB', 'paymentid', 'LoanID', 'PostedDate', 'PaymentNo', 'TrxType', 'Reference', 'Reference_', 'Payment', 'Interest', 'Principal', 'Balance', 'Unpaid', 'CreateDate', 'UpdateDate']
+payments_col = ['DB', 'paymentid', 'LoanID', 'PostedDate', 'PaymentNo', 'TrxType', 'Reference', 'Reference_', 'Payment', 'Interest', 'DaysLast','Principal', 'Balance', 'Unpaid', 'CreateDate', 'UpdateDate']
 tblPayments = pd.read_csv(rf'LGCYtblPayments_{pulldate}.csv', names = payments_col)
 
 
@@ -55,5 +55,10 @@ tblPayments.to_sql('test_tblPayments',con = cnxn,if_exists = 'append', index=Fal
 #tblusers.to_sql('test_tblusers',con = cnxn,if_exists = 'replace', index=False)
 
 
+#os.chdir(rf'\\ac-hq-fs01\users$\daflores\My Documents\LGCY Python\\')
 
+#dayslast = ['DB', 'PaymentID', 'LoanID', 'DaysLast']
+#dayslast = pd.read_csv(rf'Days Last DB PaymentID LoanID DaysLast.csv', names=dayslast)
+
+#dayslast.to_sql('test_dayslast',con = cnxn,if_exists = 'append', index=False)
 

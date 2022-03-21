@@ -84,9 +84,11 @@ del(sql_StoreSalesReport)
 # STAGE DATE DIMENSION
 from datetime import date
 
-Today = datetime(2022, 1,31)  # For manual week.  This must match SQL being executed
+Today = datetime(2022, 2,28)  # For manual week.  This must match SQL being executed
 #Today = datetime.today()
 Today_nthDayOfYear = Today.timetuple().tm_yday
+today_text = '2022-02-28'
+latestSun_text = '2022-02-27'
 
 DateDim = pd.DataFrame(pd.date_range(Today-timedelta(days=Today_nthDayOfYear-1), periods=365).strftime('%Y-%m-%d'),columns=['Date'])
 DateDim['Month'] = pd.to_datetime(DateDim.Date).dt.month
@@ -96,7 +98,7 @@ DateDim['Weekday_nthOfMonth'] = DateDim.groupby(['Month','Weekday']).cumcount()+
 DateDim_Sundays = DateDim[DateDim['Weekday'] == 6]
 DateDim_Sundays = DateDim_Sundays.reset_index(drop=True)
 Date_Sunday_CurrWk = DateDim_Sundays[DateDim_Sundays.Date < str(Today)].Date.max()
-Date_Sunday_CurrWk = '2022-01-31'
+Date_Sunday_CurrWk = today_text
 
 WeekAgo = Today-timedelta(days=7)
 del(Today, Today_nthDayOfYear, DateDim)
@@ -128,9 +130,9 @@ DateDim_Sundays = DateDim_Sundays.sort_values(by='Date')
 DateDim_Sundays.reset_index(inplace=True, drop=True)
 
 Date_Sunday_PriorWk = DateDim_Sundays[DateDim_Sundays.Date < str(Date_Sunday_CurrWk)].Date.max()
-Date_Sunday_PriorWk = '2022-01-30'
+Date_Sunday_PriorWk = latestSun_text
 Date_Sunday_PriorMth = DateDim_Sundays[DateDim_Sundays.Date < str(WeekAgo)].Date.max()
-Date_Sunday_PriorMth = '2022-01-30'
+Date_Sunday_PriorMth = latestSun_text
 
 # STAGE FILEPATH AND FILENAME VARIABLES
 MainDir = r'//ac-hq-fs01/Accounting/Finance/002 Areas/FinBond/FinBond Monthly Reporting Package/'
@@ -139,9 +141,9 @@ MainDir = r'//ac-hq-fs01/Accounting/Finance/002 Areas/FinBond/FinBond Monthly Re
 Param_Year_CurrWk = str(datetime.strptime(Date_Sunday_CurrWk,'%Y-%m-%d').year)
 Param_Month_CurrWk = str(datetime.strptime(Date_Sunday_CurrWk,'%Y-%m-%d').month).rjust(2,'0')
 Param_nthWeek_CurrMth_CurrWk = str(int(DateDim_Sunday_CurrWk.Weekday_nthOfMonth))
-Param_nthWeek_CurrMth_CurrWk = '6'
+Param_nthWeek_CurrMth_CurrWk = '5'
 WkDir_CurrWk = str(Param_nthWeek_CurrMth_CurrWk) + ' ' + 'WK ' + Date_Sunday_CurrWk
-WkDir_CurrWk = '6 WK 2022-01-31'
+WkDir_CurrWk = '5 WK 2022-02-28'
 Filepath_Reporting_CurrMth = MainDir + Param_Year_CurrWk + '/' + Param_Month_CurrWk
 Filepath_Reporting_CurrWk = MainDir + Param_Year_CurrWk + '/' + Param_Month_CurrWk + '/' + WkDir_CurrWk + '/'
 Filepath_Summary_CurrWk = MainDir + Param_Year_CurrWk + '/' + Param_Month_CurrWk + '/Summary/'
