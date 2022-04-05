@@ -2,12 +2,16 @@ import os
 import datetime
 import pause
 
-dir = r'\\ac-hq-fs01\accounting\Finance\002 Areas\FinBond\FinBond Monthly Reporting Package\2022\03\3 WK 2022-03-20'
+dir = r'\\ac-hq-fs01\accounting\Finance\002 Areas\FinBond\FinBond Monthly Reporting Package\2022\03\Monthlies'
 os.chdir(dir)
 list = os.listdir(dir)
 
+##for weekly
+#for i in list:
+#    os.rename(i,'2022 03 WK 5' + i[12:])
+#for monthly
 for i in list:
-    os.rename(i,'2022 03 WK 3' + i[12:])
+    os.rename(i,'2022 03' + i[7:])
 
     
 #print(datetime.datetime.now())

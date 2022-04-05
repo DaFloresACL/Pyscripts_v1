@@ -8,13 +8,13 @@ import openpyxl
 import datetime
 import os
 
-col = ['CST_PeriodStart', 'Tenant', 'CustomerType', 'States', 'AR', 'Secured', 'LTD_WO', 'LTD_Recovery', 'Loan_Active_Eventual_WO', 'Loan_Active_Eventual_Recovery', 'Month_WO_Amount', 'Month_Recovery_Amount', '00-06_Months_Recovery', '07-12_Months_Recovery', '01-02_Years_Recovery', '02-03_Years_Recovery', '03+_Years_Recovery']
+#col = ['CST_PeriodStart', 'Tenant', 'CustomerType', 'States', 'AR', 'Secured', 'LTD_WO', 'LTD_Recovery', 'Loan_Active_Eventual_WO', 'Loan_Active_Eventual_Recovery', 'Month_WO_Amount', 'Month_Recovery_Amount', '00-06_Months_Recovery', '07-12_Months_Recovery', '01-02_Years_Recovery', '02-03_Years_Recovery', '03+_Years_Recovery']
 
-df = pd.DataFrame(data= None, columns = col)
+#df = pd.DataFrame(data= None, columns = col)
 
 os.chdir(r'\\ac-hq-fs01\users$\daflores\My Documents\2022-03\\')
 
-df = pd.read_excel('Recovery Analysis DATA 03.18.2022.xlsx')
+df = pd.read_excel('Recovery Analysis DATA 03.23.2022.xlsx')
 
 file = 'RecoverySummary.xlsx'
 
@@ -36,8 +36,8 @@ for tenant in tenants:
                 spacing = 65
             customer_df = state_df[state_df['CustomerType'] == customerType]
             customer_df['CustomerType'] = customerType
-            table_df = np.round(pd.pivot_table(customer_df,values=['AR', 'Month_WO_Amount', 'Month_Recovery_Amount','LTD_WO', 'LTD_Recovery', '00-06_Months_Recovery', '07-12_Months_Recovery', '01-02_Years_Recovery', '02-03_Years_Recovery', '03+_Years_Recovery','TotalRecovery'],index = ['CustomerType','CST_PeriodStart'], aggfunc={'AR': np.sum, 'Month_WO_Amount': np.sum, 'Month_Recovery_Amount': np.sum, 'LTD_WO': np.sum, 'LTD_Recovery': np.sum, '00-06_Months_Recovery': np.sum, '07-12_Months_Recovery': np.sum, '01-02_Years_Recovery': np.sum, '02-03_Years_Recovery': np.sum, '03+_Years_Recovery': np.sum, 'TotalRecovery': np.sum},fill_value=0),2)
-            table_df = table_df[['Month_WO_Amount', 'Month_Recovery_Amount', 'LTD_WO', 'LTD_Recovery','TotalRecovery',  '00-06_Months_Recovery', '07-12_Months_Recovery', '01-02_Years_Recovery', '02-03_Years_Recovery','03+_Years_Recovery']]
+            table_df = np.round(pd.pivot_table(customer_df,values=['AR', 'Month_WO_Amount', 'Month_Recovery_Amount','LTD_WO', 'LTD_Recovery', '00-06_Months_Recovery', '07-12_Months_Recovery', '01-02_Years_Recovery', '02-03_Years_Recovery', '03+_Years_Recovery','TotalRecovery','LTD_Recovery_Principal','LTD_Recovery_Interest'],index = ['CustomerType','CST_PeriodStart'], aggfunc={'AR': np.sum, 'Month_WO_Amount': np.sum, 'Month_Recovery_Amount': np.sum, 'LTD_WO': np.sum, 'LTD_Recovery': np.sum, '00-06_Months_Recovery': np.sum, '07-12_Months_Recovery': np.sum, '01-02_Years_Recovery': np.sum, '02-03_Years_Recovery': np.sum, '03+_Years_Recovery': np.sum, 'TotalRecovery': np.sum, 'LTD_Recovery_Principal': np.sum, 'LTD_Recovery_Interest': np.sum},fill_value=0),2)
+            table_df = table_df[['AR','Month_WO_Amount', 'Month_Recovery_Amount', 'LTD_WO', 'LTD_Recovery','LTD_Recovery_Principal', 'LTD_Recovery_Interest' ,'TotalRecovery',  '00-06_Months_Recovery', '07-12_Months_Recovery', '01-02_Years_Recovery',  '02-03_Years_Recovery','03+_Years_Recovery']]
             table_df.to_excel(writer, sheet_name = tenant + '-' + state, startrow = spacing)
             spacing = len(df) + 5
             

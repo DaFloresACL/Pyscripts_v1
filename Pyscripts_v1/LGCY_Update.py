@@ -8,7 +8,7 @@ from sqlalchemy import create_engine
 import os
 import urllib
 
-pulldate = '03.01.2022'
+pulldate = '04.01.2022'
 os.chdir(rf'\\ac-hq-fs01\users$\daflores\My Documents\LGCY Python\{pulldate}\\')
 os.getcwd()
 
@@ -26,6 +26,8 @@ tblLoans = pd.read_csv(rf'LGCYtblLoans_{pulldate}.csv', names = loans_col)
 payments_col = ['DB', 'paymentid', 'LoanID', 'PostedDate', 'PaymentNo', 'TrxType', 'Reference', 'Reference_', 'Payment', 'Interest', 'DaysLast','Principal', 'Balance', 'Unpaid', 'CreateDate', 'UpdateDate']
 tblPayments = pd.read_csv(rf'LGCYtblPayments_{pulldate}.csv', names = payments_col)
 
+paymentsDelete_col = ['DB', 'paymentid', 'LoanID', 'PostedDate', 'PaymentNo', 'TrxType', 'Reference', 'Reference_', 'Payment', 'Interest', 'DaysLast','Principal', 'Balance', 'Unpaid', 'CreateDate', 'UpdateDate']
+tblPaymentsDelete = pd.read_csv(rf'LGCYtblPaymentsDELETED_{pulldate}.csv', names = paymentsDelete_col)
 
 #users_col = ['DB', 'UserID', 'User', 'Name', 'FirstName', 'LastName', 'LocationID', 'Location', 'Password', 'Code', 'Group', 'Active', 'LoansInstallment', 'CollectionsInstallment', 'LoansPayday', 'CollectionsPayday', 'LoansDays', 'CollectionsDays', 'Log', 'Logon', 'Logoff', 'Collector', 'User_ID', 'Location_ID', 'Last Edit', 'msrepl_tran_version', 'EmployeeNo'
 #]
@@ -52,6 +54,7 @@ tblFee.to_sql('test_tblFee',con = cnxn,if_exists = 'append', index=False)
 tblHistory.to_sql('test_tblHistory',con = cnxn,if_exists = 'append', index=False)
 tblLoans.to_sql('test_tblLoan',con = cnxn,if_exists = 'append', index=False)
 tblPayments.to_sql('test_tblPayments',con = cnxn,if_exists = 'append', index=False)
+tblPaymentsDelete.to_sql('test_tblPaymentsDeleted',con = cnxn,if_exists = 'append', index=False)
 #tblusers.to_sql('test_tblusers',con = cnxn,if_exists = 'replace', index=False)
 
 

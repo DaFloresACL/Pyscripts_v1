@@ -5,7 +5,7 @@ import pyodbc
 #a = pd.read_csv(r'\\ac-hq-fs01\accounting\Finance\002 Areas\FinBond\FinBond Ad Hoc Projects\IFRS9 impairments\2022\2022-02-28 IFRS9 impairments old.csv',nrows = 20)
 #a.Branch
 #period_end day after EOM
-period_end='2022-03-01'
+period_end='2022-04-01'
 #period_start does not change
 period_start='2016-11-01'
 
@@ -68,7 +68,7 @@ stg_df_lgcy.drop(['BranchNo_LMS'], axis = 1, inplace=True)
 stg_df_lgcy.rename(columns={'BranchNo_LEG':'BranchNo_LMS'},inplace=True)
 del LMS, LGCY
 df_lms=pd.concat([stg_df_lms,stg_df_lgcy])
-
+df_lms = df_lms.reset_index(drop = True)
 df_lms.rename(columns={'BranchNo_LMS':'BranchNo'},inplace=True)
 df_lms.info()
 
@@ -116,6 +116,6 @@ df_output[df_output.Branch!='SAIL IL'][df_output.Branch!='WLM SAIL'][df_output.B
 
 
 save_path = r'\\ac-hq-fs01\accounting\Finance\002 Areas\FinBond\FinBond Ad Hoc Projects\IFRS9 impairments\2022'
-df_output.to_csv(save_path + '\\2022-02-28 IFRS9 impairments v3.csv',index=0)
+df_output.to_csv(save_path + '\\2022-03-31 IFRS9 impairments v3.csv',index=0)
 
 #a = pd.read_csv(save_path + '\\2022-02-28 IFRS9 impairments v3.csv', nrows=20)

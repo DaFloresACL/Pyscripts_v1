@@ -84,11 +84,11 @@ del(sql_StoreSalesReport)
 # STAGE DATE DIMENSION
 from datetime import date
 
-Today = datetime(2022, 2,28)  # For manual week.  This must match SQL being executed
+Today = datetime(2022, 3,31)  # For manual week.  This must match SQL being executed
 #Today = datetime.today()
 Today_nthDayOfYear = Today.timetuple().tm_yday
-today_text = '2022-02-28'
-latestSun_text = '2022-02-27'
+today_text = '2022-03-31'
+latestSun_text = '2022-03-27'
 
 DateDim = pd.DataFrame(pd.date_range(Today-timedelta(days=Today_nthDayOfYear-1), periods=365).strftime('%Y-%m-%d'),columns=['Date'])
 DateDim['Month'] = pd.to_datetime(DateDim.Date).dt.month
@@ -143,7 +143,7 @@ Param_Month_CurrWk = str(datetime.strptime(Date_Sunday_CurrWk,'%Y-%m-%d').month)
 Param_nthWeek_CurrMth_CurrWk = str(int(DateDim_Sunday_CurrWk.Weekday_nthOfMonth))
 Param_nthWeek_CurrMth_CurrWk = '5'
 WkDir_CurrWk = str(Param_nthWeek_CurrMth_CurrWk) + ' ' + 'WK ' + Date_Sunday_CurrWk
-WkDir_CurrWk = '5 WK 2022-02-28'
+WkDir_CurrWk = '5 WK 2022-03-31'
 Filepath_Reporting_CurrMth = MainDir + Param_Year_CurrWk + '/' + Param_Month_CurrWk
 Filepath_Reporting_CurrWk = MainDir + Param_Year_CurrWk + '/' + Param_Month_CurrWk + '/' + WkDir_CurrWk + '/'
 Filepath_Summary_CurrWk = MainDir + Param_Year_CurrWk + '/' + Param_Month_CurrWk + '/Summary/'
