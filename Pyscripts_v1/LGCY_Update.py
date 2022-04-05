@@ -47,8 +47,10 @@ conn_str = (
 )
 quoted_conn_str = urllib.parse.quote_plus(conn_str)
 engine = create_engine(f'mssql+pyodbc:///?odbc_connect={quoted_conn_str}')
+connection = engine.raw_connection()
+csr = connection.cursor()
 cnxn = engine.connect()
-engine = create_engine('mssql+pyodbc://AC-PC-097/FinanceTeamDB')
+#engine = create_engine('mssql+pyodbc://AC-PC-097/FinanceTeamDB')
 #pandas command to upload DF to table, append add rows & replace drops table then recreates it
 tblFee.to_sql('test_tblFee',con = cnxn,if_exists = 'append', index=False)
 tblHistory.to_sql('test_tblHistory',con = cnxn,if_exists = 'append', index=False)
@@ -56,6 +58,10 @@ tblLoans.to_sql('test_tblLoan',con = cnxn,if_exists = 'append', index=False)
 tblPayments.to_sql('test_tblPayments',con = cnxn,if_exists = 'append', index=False)
 tblPaymentsDelete.to_sql('test_tblPaymentsDeleted',con = cnxn,if_exists = 'append', index=False)
 #tblusers.to_sql('test_tblusers',con = cnxn,if_exists = 'replace', index=False)
+
+csr.execute("merge_LGCYtbls")
+csr.close()
+connection.commit()
 
 
 #os.chdir(rf'\\ac-hq-fs01\users$\daflores\My Documents\LGCY Python\\')

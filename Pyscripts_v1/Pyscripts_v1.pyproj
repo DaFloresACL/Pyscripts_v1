@@ -38,7 +38,7 @@
     <Compile Include="EOM_LoanProd_Spreadsheet.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FinBondWeekly_mod.py">
+    <Compile Include="FinBondWeekly_EOMWeekly.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FinBondWeekly_standard.py">
